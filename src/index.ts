@@ -34,6 +34,7 @@ const main = async () => {
 		const method = core.getInput("method");
 		const UAClientId = core.getInput("client-id");
 		const UAClientSecret = core.getInput("client-secret");
+		const serviceToken = core.getInput("service-token");
 		const identityId = core.getInput("identity-id");
 		const oidcAudience = core.getInput("oidc-audience");
 		const domain = core.getInput("domain");
@@ -82,6 +83,14 @@ const main = async () => {
 					axiosInstance,
 					identityId
 				});
+				break;
+			}
+			case AuthMethod.ServiceToken: {
+				if (!serviceToken) {
+					throw new Error("Missing service token for service-token auth");
+				}
+				// Service tokens are used directly as Bearer tokens - no login required
+				infisicalToken = serviceToken;
 				break;
 			}
 			default:

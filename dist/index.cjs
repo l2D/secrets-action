@@ -52770,7 +52770,8 @@ const AWS_IDENTITY_DOCUMENT_URI = "http://169.254.169.254/latest/dynamic/instanc
 const AuthMethod = {
     Universal: "universal",
     Oidc: "oidc",
-    AwsIam: "aws-iam"
+    AwsIam: "aws-iam",
+    ServiceToken: "service-token"
 };
 
 const handleError = (err) => {
@@ -52984,6 +52985,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const method = core.getInput("method");
         const UAClientId = core.getInput("client-id");
         const UAClientSecret = core.getInput("client-secret");
+        const serviceToken = core.getInput("service-token");
         const identityId = core.getInput("identity-id");
         const oidcAudience = core.getInput("oidc-audience");
         const domain = core.getInput("domain");
@@ -53029,6 +53031,14 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
                     axiosInstance,
                     identityId
                 });
+                break;
+            }
+            case AuthMethod.ServiceToken: {
+                if (!serviceToken) {
+                    throw new Error("Missing service token for service-token auth");
+                }
+                // Service tokens are used directly as Bearer tokens - no login required
+                infisicalToken = serviceToken;
                 break;
             }
             default:

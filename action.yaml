@@ -6,9 +6,12 @@ branding:
   color: "yellow"
 inputs:
   method:
-    description: "The authentication method to use (universal, oidc, aws-iam)"
+    description: "The authentication method to use (universal, oidc, aws-iam, service-token)"
     required: false
     default: "universal"
+  service-token:
+    description: "Infisical Service Token (only used when method is service-token)"
+    required: false
   client-id:
     description: "Machine Identity client ID"
     required: false
