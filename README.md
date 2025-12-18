@@ -19,7 +19,7 @@ This GitHub Action enables you to import secrets from Infisical—whether hosted
 - Ensure your runner has network access to AWS STS API endpoints.
 
 ```yaml
-- uses: Infisical/secrets-action@v1.0.9
+- uses: Infisical/secrets-action@v1.0.15
   with:
     method: "aws-iam"
     identity-id: "24be0d94-b43a-41c4-812c-1e8654d9ce1e"
@@ -54,7 +54,7 @@ permissions:
 - Set `method` to `service-token` and configure the `service-token` input parameter.
 
 ```yaml
-- uses: Infisical/secrets-action@v1.0.9
+- uses: Infisical/secrets-action@v1.0.15
   with:
     method: "service-token"
     service-token: ${{ secrets.INFISICAL_SERVICE_TOKEN }}
@@ -72,7 +72,7 @@ With this action, you can use your Infisical secrets in two ways: as environment
 Secrets are injected as environment variables and can be referenced by subsequent workflow steps.
 
 ```yaml
-- uses: Infisical/secrets-action@v1.0.9
+- uses: Infisical/secrets-action@v1.0.15
   with:
     method: "oidc"
     identity-id: "24be0d94-b43a-41c4-812c-1e8654d9ce1e"
@@ -86,7 +86,7 @@ Secrets are injected as environment variables and can be referenced by subsequen
 Exports secrets to a file in your `GITHUB_WORKSPACE`, useful for applications that read from `.env` files.
 
 ```yaml
-- uses: Infisical/secrets-action@v1.0.9
+- uses: Infisical/secrets-action@v1.0.15
   with:
     method: "oidc"
     identity-id: "24be0d94-b43a-41c4-812c-1e8654d9ce1e"
@@ -199,7 +199,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Setup Infisical Secrets
-        uses: Infisical/secrets-action@v1.0.12
+        uses: Infisical/secrets-action@v1.0.15
         with:
           method: "universal"
           domain: "https://<infisical instance url>"  # Your internal Infisical domain
