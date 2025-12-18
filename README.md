@@ -4,8 +4,11 @@ This GitHub Action enables you to import secrets from Infisical—whether hosted
 
 ## Configuration
 
-- In order to use this, you will need to configure a [Machine Identity](https://infisical.com/docs/documentation/platform/identities/machine-identities) for your project.
-- This action supports three ways to authenticate your workflows with Infisical - [AWS IAM Auth](https://infisical.com/docs/documentation/platform/identities/aws-auth), [OIDC](https://infisical.com/docs/documentation/platform/identities/oidc-auth/github) and [universal auth](https://infisical.com/docs/documentation/platform/identities/universal-auth).
+- This action supports four ways to authenticate your workflows with Infisical:
+  - [Universal Auth](https://infisical.com/docs/documentation/platform/identities/universal-auth) - Machine Identity with client ID/secret
+  - [OIDC Auth](https://infisical.com/docs/documentation/platform/identities/oidc-auth/github) - GitHub OIDC token exchange
+  - [AWS IAM Auth](https://infisical.com/docs/documentation/platform/identities/aws-auth) - AWS IAM-based authentication
+  - [Service Token](https://infisical.com/docs/documentation/platform/token) - Project-scoped service tokens
 
 ### AWS IAM Auth
 
@@ -43,6 +46,22 @@ permissions:
 - Configure a machine identity to have an auth method of "Universal Auth".
 - Get the machine identity's `client_id` and `client_secret` and store them as Github secrets (recommended) or environment variables.
 - Set the `client-id` and `client-secret` input parameters.
+
+### Service Token Auth
+
+- Create a service token in your project's Access Control > Service Tokens tab. Refer to the setup guide [here](https://infisical.com/docs/documentation/platform/token).
+- Store the service token as a GitHub secret (recommended).
+- Set `method` to `service-token` and configure the `service-token` input parameter.
+
+```yaml
+- uses: Infisical/secrets-action@v1.0.9
+  with:
+    method: "service-token"
+    service-token: ${{ secrets.INFISICAL_SERVICE_TOKEN }}
+    domain: "https://app.infisical.com"
+    env-slug: "dev"
+    project-slug: "my-project"
+```
 
 ## Usage
 
@@ -90,7 +109,7 @@ steps:
 
 ### `method`
 
-**Optional**. The authentication method to use. Defaults to `universal`. Possible values are `universal`, `oidc`, and `aws-iam`
+**Optional**. The authentication method to use. Defaults to `universal`. Possible values are `universal`, `oidc`, `aws-iam`, and `service-token`.
 
 ### `client-id`
 
@@ -106,7 +125,11 @@ steps:
 
 ### `oidc-audience`
 
-**Optional**. Custom aud claim for the signed Github ID token
+**Optional**. Custom aud claim for the signed Github ID token.
+
+### `service-token`
+
+**Optional**. Infisical Service Token. Only used when `method` is set to `service-token`.
 
 ### `project-slug`
 
