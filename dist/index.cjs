@@ -52922,22 +52922,29 @@ const getAwsRegion = () => __awaiter(void 0, void 0, void 0, function* () {
         throw err;
     }
 });
-const getRawSecrets = (_a) => __awaiter(void 0, [_a], void 0, function* ({ envSlug, infisicalToken, projectSlug, secretPath, shouldIncludeImports, shouldRecurse, axiosInstance }) {
+const getRawSecrets = (_a) => __awaiter(void 0, [_a], void 0, function* ({ envSlug, infisicalToken, projectSlug, projectId, secretPath, shouldIncludeImports, shouldRecurse, axiosInstance }) {
     try {
+        const params = {
+            secretPath,
+            environment: envSlug,
+            include_imports: shouldIncludeImports,
+            recursive: shouldRecurse,
+            expandSecretReferences: true
+        };
+        // Use workspaceId if project-id is provided, otherwise fall back to workspaceSlug
+        if (projectId) {
+            params.workspaceId = projectId;
+        }
+        else {
+            params.workspaceSlug = projectSlug;
+        }
         const response = yield axiosInstance({
             method: "get",
             url: "/api/v3/secrets/raw",
             headers: {
                 Authorization: `Bearer ${infisicalToken}`
             },
-            params: {
-                secretPath,
-                environment: envSlug,
-                include_imports: shouldIncludeImports,
-                recursive: shouldRecurse,
-                workspaceSlug: projectSlug,
-                expandSecretReferences: true
-            }
+            params
         });
         const keyValueSecrets = Object.fromEntries(response.data.secrets.map(secret => [secret.secretKey, secret.secretValue]));
         // process imported secrets
@@ -52991,6 +52998,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const domain = core.getInput("domain");
         const envSlug = core.getInput("env-slug");
         const projectSlug = core.getInput("project-slug");
+        const projectId = core.getInput("project-id");
         const secretPath = core.getInput("secret-path");
         const exportType = core.getInput("export-type");
         const fileOutputPath = core.getInput("file-output-path");
@@ -53050,6 +53058,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             envSlug,
             infisicalToken,
             projectSlug,
+            projectId,
             secretPath,
             shouldIncludeImports,
             shouldRecurse

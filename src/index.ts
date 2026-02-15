@@ -40,6 +40,7 @@ const main = async () => {
 		const domain = core.getInput("domain");
 		const envSlug = core.getInput("env-slug");
 		const projectSlug = core.getInput("project-slug");
+		const projectId = core.getInput("project-id");
 		const secretPath = core.getInput("secret-path");
 		const exportType = core.getInput("export-type");
 		const fileOutputPath = core.getInput("file-output-path");
@@ -103,6 +104,7 @@ const main = async () => {
 			envSlug,
 			infisicalToken,
 			projectSlug,
+			projectId,
 			secretPath,
 			shouldIncludeImports,
 			shouldRecurse
